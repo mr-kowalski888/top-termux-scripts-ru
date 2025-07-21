@@ -43,7 +43,6 @@ utility_descriptions=(
   "inxi       - подробная информация о системе"
   "perl       - требуется для inxi"
   "nmap       - сканер портов"
-  "netcat     - диагностика сети"
   "whois      - информация о доменах"
   "traceroute - маршрут до хоста"
   "python     - язык программирования"
@@ -56,16 +55,16 @@ utility_descriptions=(
   "rust       - язык Rust"
   "figlet     - ASCII-баннеры"
   "toilet     - стильные баннеры"
-  "lolcat     - цветной вывод"
+  "lolcat     - цветной вывод (устанавливается через gem)"
 )
 
-# === СПИСОК ПАКЕТОВ ДЛЯ УСТАНОВКИ ===
+# === СПИСОК ПАКЕТОВ ДЛЯ pkg ===
 packages=(
   curl wget git nano vim unzip tar zip tree coreutils
   htop neofetch proot termux-api openssh dnsutils busybox inxi perl
-  nmap netcat whois traceroute
+  nmap whois traceroute
   python python-pip nodejs php clang ruby golang rust
-  figlet toilet lolcat
+  figlet toilet
 )
 
 # === ВЫВОД СПИСКА ПЕРЕД УСТАНОВКОЙ ===
@@ -88,7 +87,7 @@ print_frame "🔄 Обновление списка пакетов..."
 yes | pkg update > /dev/null 2>&1
 yes | pkg upgrade > /dev/null 2>&1
 
-# === УСТАНОВКА УТИЛИТ ===
+# === УСТАНОВКА ЧЕРЕЗ pkg ===
 print_frame "🚀 Начинается установка утилит..."
 
 for package in "${packages[@]}"; do
@@ -99,6 +98,14 @@ for package in "${packages[@]}"; do
     print_error "Не удалось установить: $package"
   fi
 done
+
+# === УСТАНОВКА lolcat через gem ===
+print_frame "🌈 Установка lolcat через Ruby gem..."
+if gem install lolcat > /dev/null 2>&1; then
+  echo -e "${GREEN}✅ lolcat установлен через gem${RESET}"
+else
+  print_error "Не удалось установить lolcat через gem"
+fi
 
 # === ФИНАЛЬНОЕ СООБЩЕНИЕ ===
 print_frame "✅ Все утилиты успешно установлены!"
